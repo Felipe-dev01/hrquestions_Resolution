@@ -11,7 +11,7 @@ namespace InterviewTestPagination.Controllers {
     /// 
     /// TODO: implement the pagination Action
     /// </summary>
-    public class TodoController 
+    public class TodoController : ApiController
     {
         // TODO: [low priority] setup DI 
         private readonly IModelService<Todo> _todoService = new TodoService();
@@ -57,3 +57,4 @@ namespace InterviewTestPagination.Controllers {
 
     }
 }
+

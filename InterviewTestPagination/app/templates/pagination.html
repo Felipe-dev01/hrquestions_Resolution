@@ -5,15 +5,15 @@
         <select ng-model="itemsPerPage" ng-change="changedItemsPerPage()">
             <!-- select how many items should be displayed per page -->
             <option value="10">10</option>
-            <option value="20" selected="selected">20</option> <!-- default option on first load should be 20 -->
+            <option value="20" selected="selected">20</option> <!-- Default option on first load is 20 -->
             <option value="30">30</option>
-            <option value="All">All</option> <!-- disregard pagination: show all the items -->
+            <option value="All">All</option> <!-- Disregard pagination: show all the items -->
         </select>
     </div>
     <div>
         <button ng-click="firstPage()" ng-disabled="currentPage  == 1">&lt;&lt;</button> <!-- << = Fist Page  -->
         <button ng-click="previousPage()" ng-disabled="currentPage  <= 1">&lt;</button> <!-- < = Previous Page -->
-
+        <!-- TODO: Accept page number by input -->
         <!-- Ng-model Gets the value of the current page -->
         Page <input ng-model="currentPage" type="number" min="1" /> of {{ totalPages }} <!-- number of pages -->
 

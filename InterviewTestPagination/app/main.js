@@ -17,22 +17,30 @@
      */
     function todoPaginatedList() {
         var directive = {
-            restrict: "E", // example setup as an element only
+            restrict: "E",
             templateUrl: "app/templates/todo.list.paginated.html",
-            scope: {}, // example empty isolate scope
+            scope: {},
             controller: ["$scope", "$http", controller],
             link: link
         };
 
-        function controller($scope, $http) { // example controller creating the scope bindings
-            $scope.todos = [];
-            // example of xhr call to the server's 'RESTful' api
-            $http.get("api/Todo/Todos").then(response => $scope.todos = response.data);
+        function controller($scope, $http) {
+            // The API brings default at startup brings 20 items per page on page 1
+            $http.get("api/todo/todospaginated")
+                .then(function (response) {
+
+                    $scope.todos = response.data.items;
+                    $scope.currentPage = response.data.currentPage;
+                    $scope.itemsPerPage = response.data.itemsPerPage;
+                    $scope.totalItems = response.data.totalItems;
+                    $scope.totalPages = response.data.totalPages;
+                })
         }
 
         function link(scope, element, attrs) { }
 
         return directive;
+
     }
 
     /**
@@ -47,9 +55,13 @@
      */
     function pagination() {
         var directive = {
-            restrict: "E", // example setup as an element only
+            restrict: "E",
             templateUrl: "app/templates/pagination.html",
-            scope: {}, // example empty isolate scope
+            scope: {
+                currentPage: "=",
+                totalItems: "=",
+                totalPages: "="
+            },
             controller: ["$scope", controller],
             link: link
         };

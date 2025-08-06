@@ -25,7 +25,7 @@
         <th>Task </th>
         <th>Created Date </th>
     </tr>
-    
+
     <!-- table:body -->
     <!--
 
@@ -35,7 +35,7 @@
     - Dont worry about styling (looking pretty, centralized, etc) it just has to show that the app is still active while the request is being made
 
     -->
-    <tr ng-repeat="todo in todos track by $index">
+    <tr ng-repeat="todo in todos">
         <td>{{todo.id}}</td>
         <td>{{todo.task}}</td>
         <td>{{todo.createdDate | date:'MM/dd/yyyy' }}</td>
@@ -43,4 +43,8 @@
 </table>
 
 <!-- pagination component -->
-<pagination></pagination>
+<pagination
+        current-page="currentPage"
+        total-items="totalItems"
+        total-pages="totalPages">
+></pagination>

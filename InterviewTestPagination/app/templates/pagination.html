@@ -11,16 +11,17 @@
         </select>
     </div>
     <div>
-        <button>&lt;&lt;</button> <!-- 'go to first page' button -->
-        <button>&lt;</button> <!-- 'go to previous page' button: can't go lower than 1 -->
-        
-        Page <input type="number" value="1" min="1" /> <!-- input to select page to go to: go to page when input changes value --> of ??total page count here?? <!-- number of pages -->
+        <button>&lt;&lt;</button> <!-- << = Fist Page  -->
+        <button>&lt;</button> <!-- < = Previous Page -->
 
-        <button>&gt;</button> <!-- 'go to next page' button: can't go higher than last page number -->
-        <button>&gt;&gt;</button> <!-- 'go to last page' button -->
+        <!-- Ng-model Gets the value of the current page -->
+        Page <input ng-model="currentPage" type="number" min="1" /> of {{ totalPages }}<!-- number of pages -->
+
+        <button>&gt;</button> <!-- > = Next Page -->
+        <button>&gt;&gt;</button> <!-- >> = Last Page -->
     </div>
     <div>
-        <span>???total item count here??? items</span> <!-- total number of items -->
+        <span>{{ totalItems }} items</span> <!-- total number of items -->
     </div>
 
 </div>

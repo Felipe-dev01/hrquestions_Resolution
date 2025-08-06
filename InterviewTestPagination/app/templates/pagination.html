@@ -1,24 +1,24 @@
 ﻿<!-- TODO: make it a reusable directive (don't worry about style) -->
 <div class="pagination">
     <div>
-        Items per page
-        <select>
+        Items per page 
+        <select ng-model="itemsPerPage" ng-change="changedItemsPerPage()">
             <!-- select how many items should be displayed per page -->
-            <option>10</option>
-            <option selected="selected">20</option> <!-- default option on first load should be 20 -->
-            <option>30</option>
-            <option>all</option> <!-- disregard pagination: show all the items -->
+            <option value="10">10</option>
+            <option value="20" selected="selected">20</option> <!-- default option on first load should be 20 -->
+            <option value="30">30</option>
+            <option value="All">All</option> <!-- disregard pagination: show all the items -->
         </select>
     </div>
     <div>
-        <button>&lt;&lt;</button> <!-- << = Fist Page  -->
-        <button>&lt;</button> <!-- < = Previous Page -->
+        <button ng-click="firstPage()" ng-disabled="currentPage  == 1">&lt;&lt;</button> <!-- << = Fist Page  -->
+        <button ng-click="previousPage()" ng-disabled="currentPage  <= 1">&lt;</button> <!-- < = Previous Page -->
 
         <!-- Ng-model Gets the value of the current page -->
-        Page <input ng-model="currentPage" type="number" min="1" /> of {{ totalPages }}<!-- number of pages -->
+        Page <input ng-model="currentPage" type="number" min="1" /> of {{ totalPages }} <!-- number of pages -->
 
-        <button>&gt;</button> <!-- > = Next Page -->
-        <button>&gt;&gt;</button> <!-- >> = Last Page -->
+        <button ng-click="nextPage()" ng-disabled="currentPage >= totalPages">&gt;</button> <!-- > = Next Page -->
+        <button ng-click="lastPage()" ng-disabled="currentPage == totalPages">&gt;&gt;</button> <!-- >> = Last Page -->
     </div>
     <div>
         <span>{{ totalItems }} items</span> <!-- total number of items -->

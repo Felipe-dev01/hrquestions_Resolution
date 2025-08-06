@@ -25,16 +25,33 @@
         };
 
         function controller($scope, $http) {
-            // The API brings default at startup brings 20 items per page on page 1
-            $http.get("api/todo/todospaginated")
-                .then(function (response) {
+            $scope.currentPage = 1;
+            $scope.itemsPerPage = 20;
+            $scope.totalItems = 0;
+            $scope.totalPages = 0;
 
-                    $scope.todos = response.data.items;
-                    $scope.currentPage = response.data.currentPage;
-                    $scope.itemsPerPage = response.data.itemsPerPage;
-                    $scope.totalItems = response.data.totalItems;
-                    $scope.totalPages = response.data.totalPages;
-                })
+            // The API brings default at startup brings 20 items per page on page 1
+            $scope.updatePage = function () {
+                $http.get(`api/todo/todospaginated?page=${$scope.currentPage}&itemsPerPage=${$scope.itemsPerPage}`)
+                    .then(function (response) {
+                        $scope.todos = response.data.items;
+                        $scope.currentPage = response.data.currentPage;
+                        // convert to STRING for print "selection Option" in the screen
+                        $scope.itemsPerPage = response.data.itemsPerPage.toString();
+                        $scope.totalItems = response.data.totalItems;
+                        $scope.totalPages = response.data.totalPages;
+                    })
+            }
+
+            // Updates the page as passed by the parameter in the 'pagination' scope in 'pagination.html'
+            $scope.onPageChange = function (itemsPerPage, currentPage) {
+                $scope.itemsPerPage = itemsPerPage;
+                $scope.currentPage = currentPage;
+                $scope.updatePage();
+            }
+
+            // Initialize the page
+            $scope.updatePage();
         }
 
         function link(scope, element, attrs) { }
@@ -60,13 +77,41 @@
             scope: {
                 currentPage: "=",
                 totalItems: "=",
-                totalPages: "="
+                totalPages: "=",
+                itemsPerPage: "=",
+                onUpdate: "&"
             },
             controller: ["$scope", controller],
             link: link
         };
 
-        function controller($scope) { }
+        function controller($scope) {
+            // Changes the number of items per screen and sends to refresh the page 
+            $scope.changedItemsPerPage = function () {
+                $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage });
+            };
+
+            // Move to the next page
+            $scope.nextPage = function () {
+                $scope.currentPage++;
+                $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
+            }
+            // Move to the previous page
+            $scope.previousPage = function () {
+                $scope.currentPage--;
+                $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
+            }
+            // Move to the last page
+            $scope.lastPage = function () {
+                $scope.currentPage = $scope.totalPages;
+                $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
+            }
+            // Move to the first page
+            $scope.firstPage = function () {
+                $scope.currentPage = 1;
+                $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
+            }
+        }
 
         function link(scope, element, attrs) { }
 

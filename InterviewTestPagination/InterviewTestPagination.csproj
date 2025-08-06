@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InterviewTestPagination</RootNamespace>
     <AssemblyName>InterviewTestPagination</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -109,6 +110,7 @@
     </Compile>
     <Compile Include="Models\IModelRepository.cs" />
     <Compile Include="Models\IModelService.cs" />
+    <Compile Include="Models\PagedResult.cs" />
     <Compile Include="Models\Todo\Todo.cs" />
     <Compile Include="Models\Todo\TodoRepository.cs" />
     <Compile Include="Models\Todo\TodoService.cs" />

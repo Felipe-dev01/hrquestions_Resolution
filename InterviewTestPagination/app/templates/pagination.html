@@ -7,18 +7,19 @@
             <option value="10">10</option>
             <option value="20" selected="selected">20</option> <!-- Default option on first load is 20 -->
             <option value="30">30</option>
-            <option value="All">All</option> <!-- Disregard pagination: show all the items -->
+            <!-- 0 == All Items -->
+            <option value="0">All</option> <!-- Disregard pagination: show all the items -->
         </select>
     </div>
     <div>
-        <button ng-click="firstPage()" ng-disabled="currentPage  == 1">&lt;&lt;</button> <!-- << = Fist Page  -->
+        <button ng-click="firstPage()" ng-disabled="currentPage  <= 1">&lt;&lt;</button> <!-- << = Fist Page  -->
         <button ng-click="previousPage()" ng-disabled="currentPage  <= 1">&lt;</button> <!-- < = Previous Page -->
-        <!-- TODO: Accept page number by input -->
-        <!-- Ng-model Gets the value of the current page -->
-        Page <input ng-model="currentPage" type="number" min="1" /> of {{ totalPages }} <!-- number of pages -->
+  
+        <!-- Ng-model Gets the value of the current page & Ng-blur updates the page when the value is changed-->
+        Page <input ng-model="currentPage" type="number" ng-blur="changedCurrentPage()" min="1" max="{{ totalPages }}"/> of {{ totalPages }} <!-- number of pages -->
 
         <button ng-click="nextPage()" ng-disabled="currentPage >= totalPages">&gt;</button> <!-- > = Next Page -->
-        <button ng-click="lastPage()" ng-disabled="currentPage == totalPages">&gt;&gt;</button> <!-- >> = Last Page -->
+        <button ng-click="lastPage()" ng-disabled="currentPage >= totalPages">&gt;&gt;</button> <!-- >> = Last Page -->
     </div>
     <div>
         <span>{{ totalItems }} items</span> <!-- total number of items -->

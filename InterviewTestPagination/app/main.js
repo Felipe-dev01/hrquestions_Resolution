@@ -41,6 +41,8 @@
                         $scope.totalItems = response.data.totalItems;
                         $scope.totalPages = response.data.totalPages;
                     })
+
+
             }
 
             // Updates the page as passed by the parameter in the 'pagination' scope in 'pagination.html'
@@ -109,6 +111,15 @@
             // Move to the first page
             $scope.firstPage = function () {
                 $scope.currentPage = 1;
+                $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
+            }
+
+            // Update the page through input
+            $scope.changedCurrentPage = function () {    
+                // If the user has deleted the input number to enter a new one
+                if ($scope.currentPage === null || $scope.currentPage === undefined) {
+                    return;
+                }
                 $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
             }
         }

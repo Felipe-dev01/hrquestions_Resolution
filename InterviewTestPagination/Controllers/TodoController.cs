@@ -4,7 +4,8 @@ using InterviewTestPagination.Models;
 using InterviewTestPagination.Models.Todo;
 using System.Linq;
 
-namespace InterviewTestPagination.Controllers {
+namespace InterviewTestPagination.Controllers
+{
     /// <summary>
     /// 'Rest' controller for the <see cref="Todo"/>
     /// model.
@@ -32,29 +33,44 @@ namespace InterviewTestPagination.Controllers {
             // Get amount ToDos 
             var totalItems = allTodos.Count();
 
-            // Calculates the total number of pages required 
-            int totalPages = (int)System.Math.Ceiling((double)totalItems / itemsPerPage);
-
-            // Calculates the quantity of items that were already shown on the previous pages 
-            int itemsToSkip = (page - 1) * itemsPerPage;
-
-            // Gets the items on the current page
-            var itemsCurrentPage = allTodos
-                .Skip(itemsToSkip)
-                .Take(itemsPerPage)
-                .ToList();
-
-            return new PagedResult<Todo>
+            if (itemsPerPage == 0)
             {
-                // Attribute defined in PagedResult = variable defined in this method 
-                Items = itemsCurrentPage,
-                CurrentPage = page,
-                ItemsPerPage = itemsPerPage,
-                TotalItems = totalItems,
-                TotalPages = totalPages
-            };
-        }
+                return new PagedResult<Todo>
+                {
+                    Items = allTodos,
+                    ItemsPerPage = totalItems,
+                    CurrentPage = page,
+                    TotalItems = totalItems,
+                    TotalPages = 1
+                };
+            }
+            else
+            {
+                // Calculates the total number of pages required 
+                int totalPages = (int)System.Math.Ceiling((double)totalItems / itemsPerPage);
 
+                // Calculates the quantity of items that were already shown on the previous pages 
+                int itemsToSkip = (page - 1) * itemsPerPage;
+
+                // Gets the items on the current page
+                var itemsCurrentPage = allTodos
+                    .Skip(itemsToSkip)
+                    .Take(itemsPerPage)
+                    .ToList();
+
+                return new PagedResult<Todo>
+                {
+                    // Attribute defined in PagedResult = variable defined in this method 
+                    Items = itemsCurrentPage,
+                    CurrentPage = page,
+                    ItemsPerPage = itemsPerPage,
+                    TotalItems = totalItems,
+                    TotalPages = totalPages
+                };
+            }
+
+
+        }
     }
 }
 

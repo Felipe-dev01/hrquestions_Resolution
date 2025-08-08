@@ -16,13 +16,13 @@
         <button ng-click="previousPage()" ng-disabled="currentPage  <= 1">&lt;</button> <!-- < = Previous Page -->
   
         <!-- Ng-model Gets the value of the current page & Ng-blur updates the page when the value is changed-->
-        Page <input ng-model="currentPage" type="number" ng-blur="changedCurrentPage()" min="1" max="{{ totalPages }}"/> of {{ totalPages }} <!-- number of pages -->
+        Page <input ng-model="currentPage" type="number" ng-change="changedCurrentPage()" ng-blur="changedCurrentPage()" min="1" max="{{ totalPages }}"/> of {{ totalPages }} <!-- number of pages -->
 
         <button ng-click="nextPage()" ng-disabled="currentPage >= totalPages">&gt;</button> <!-- > = Next Page -->
         <button ng-click="lastPage()" ng-disabled="currentPage >= totalPages">&gt;&gt;</button> <!-- >> = Last Page -->
     </div>
     <div>
-        <span>{{ totalItems }} items</span> <!-- total number of items -->
+        <span>{{ totalItems }} Items</span> <!-- total number of items -->
     </div>
 
 </div>

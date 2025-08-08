@@ -3,6 +3,7 @@ using System.Web.Http;
 using InterviewTestPagination.Models;
 using InterviewTestPagination.Models.Todo;
 using System.Linq;
+using System;
 
 namespace InterviewTestPagination.Controllers
 {
@@ -20,18 +21,57 @@ namespace InterviewTestPagination.Controllers
         /// <summary>
         /// Returns a page of Paginated ToDos  
         /// </summary>
-        /// <param name="page"> Page number (starts at 1, default: 1)</param>
-        /// <param name="items"> Number of items per page (default: 20)</param>
+        /// <param name="page"> Page number (default: 1)</param>
+        /// <param name="itemsPerPage"> Number of items per page (default: 20)</param>
+        /// <param name="priorityOrder">Order of priority for diminishing or increasing returns (1 for increasing and 2 for decreasing)</param>
+        /// <param name="sort priority by id, task or creation date"> Number of items per page (default: 20)</param>
         /// <returns>Paginated result with ToDos</returns>
 
         [HttpGet]
-        public PagedResult<Todo> TodosPaginated(int page = 1, int itemsPerPage = 20)
+        public PagedResult<Todo> TodosPaginated(int page = 1, int itemsPerPage = 20, int priorityOrder = 0, String sortPriorityBy = "")
         {
             // Get all ToDos
             var allTodos = _todoService.Repository.All();
 
             // Get amount ToDos 
             var totalItems = allTodos.Count();
+
+
+            if (priorityOrder != 0 && sortPriorityBy != "")
+            {
+                // priorityOrder == 1 -> Organizes data in ascending order
+                if (priorityOrder == 1)
+                {
+                    switch (sortPriorityBy)
+                    {
+                        case "id":
+                            allTodos = allTodos.OrderBy(item => item.Id);
+                            break;
+                        case "task":
+                            allTodos = allTodos.OrderBy(item => item.Task);
+                            break;
+                        case "createdDate":
+                            allTodos = allTodos.OrderBy(item => item.CreatedDate);
+                            break;
+                    }
+                }
+                // priorityOrder == 2 -> Organizes data in descending order
+                if (priorityOrder == 2)
+                {
+                    switch (sortPriorityBy)
+                    {
+                        case "id":
+                            allTodos = allTodos.OrderByDescending(item => item.Id);
+                            break;
+                        case "task":
+                            allTodos = allTodos.OrderByDescending(item => item.Task);
+                            break;
+                        case "createdDate":
+                            allTodos = allTodos.OrderByDescending(item => item.CreatedDate);
+                            break;
+                    }
+                }
+            }
 
             if (itemsPerPage == 0)
             {
@@ -68,8 +108,6 @@ namespace InterviewTestPagination.Controllers
                     TotalPages = totalPages
                 };
             }
-
-
         }
     }
 }

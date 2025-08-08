@@ -21,18 +21,27 @@
             templateUrl: "app/templates/todo.list.paginated.html",
             scope: {},
             controller: ["$scope", "$http", controller],
-            link: link
         };
 
         function controller($scope, $http) {
+
+            // Variable initialization
             $scope.currentPage = 1;
             $scope.itemsPerPage = 20;
             $scope.totalItems = 0;
             $scope.totalPages = 0;
+            // Order of priority for diminishing or increasing returns (1 for increasing and 2 for decreasing)
+            $scope.priorityOrder = 0;
+            $scope.sortPriorityBy = "";
+            $scope.priorityOrderId = 0;
+            $scope.priorityOrderTask = 0;
+            $scope.priorityOrderDate = 0;
 
             // The API brings default at startup brings 20 items per page on page 1
             $scope.updatePage = function () {
-                $http.get(`api/todo/todospaginated?page=${$scope.currentPage}&itemsPerPage=${$scope.itemsPerPage}`)
+
+
+                $http.get(`api/todo/todospaginated?page=${$scope.currentPage}&itemsPerPage=${$scope.itemsPerPage}&priorityOrder=${$scope.priorityOrder}&sortPriorityBy=${$scope.sortPriorityBy}`)
                     .then(function (response) {
                         $scope.todos = response.data.items;
                         $scope.currentPage = response.data.currentPage;
@@ -41,8 +50,6 @@
                         $scope.totalItems = response.data.totalItems;
                         $scope.totalPages = response.data.totalPages;
                     })
-
-
             }
 
             // Updates the page as passed by the parameter in the 'pagination' scope in 'pagination.html'
@@ -54,10 +61,76 @@
 
             // Initialize the page
             $scope.updatePage();
+
+            // Adiciona indicador visual no cabeçalho
+            function addIndicator(columnType, order) {
+                var header = document.getElementById(`${columnType}`);
+                if (header) {
+                    var text = header.innerHTML.replace(' ↑', '').replace(' ↓', '');
+                    if (order === 1) {
+                        header.innerHTML = text + ' ↑';
+                    } else if (order === 2) {
+                        header.innerHTML = text + ' ↓';
+                    }
+                }
+            }
+
+            // adiciona a seta no header da tabela
+            $scope.addArrows = function (type, priorityOrder) {
+                let header = document.getElementById(type);
+                if (priorityOrder == 1) {
+                    header.innerHTML += " ↑";
+                } else if (priorityOrder == 2) {
+                    header.innerHTML += " ↓";
+                }
+            }
+
+            $scope.removeAllArrows = function () {
+                let headers = document.querySelectorAll('th');
+                headers.forEach(function (header) {
+                    // Remove todos as setas do header da tabela
+                    header.innerHTML = header.innerHTML.replace(' ↑', '').replace(' ↓', '');
+                })
+            }
+
+            $scope.nextOrder = function (currentOrder) {
+                if (currentOrder == 0) {
+                    return 1;
+                } else if (currentOrder == 1) {
+                    return 2;
+                } else if (currentOrder == 2) {
+                    return 0;
+                }
+            }
+
+
+            $scope.sortPriority = function (type) {
+
+                // Remove todas as setas
+                $scope.removeAllArrows();
+
+                switch (type) {
+                    case 'id':
+                        $scope.priorityOrderId = $scope.nextOrder($scope.priorityOrderId);
+                        $scope.priorityOrder = $scope.priorityOrderId;
+                        $scope.sortPriorityBy = "id";
+                        $scope.addArrows('id', $scope.priorityOrderId);
+                        break;
+                    case 'task':
+                        $scope.priorityOrderTask = $scope.nextOrder($scope.priorityOrderTask);
+                        $scope.priorityOrder = $scope.priorityOrderTask;
+                        $scope.addArrows('task', $scope.priorityOrderTask);
+                        break;
+                    case 'createdDate':
+                        $scope.priorityOrderDate = $scope.nextOrder($scope.priorityOrderDate);
+                        $scope.priorityOrder = $scope.priorityOrderDate;
+                        $scope.addArrows('createdDate', $scope.priorityOrderDate);
+                        break;
+                }
+                $scope.updatePage();
+            }
+
         }
-
-        function link(scope, element, attrs) { }
-
         return directive;
 
     }
@@ -84,7 +157,6 @@
                 onUpdate: "&"
             },
             controller: ["$scope", controller],
-            link: link
         };
 
         function controller($scope) {
@@ -115,7 +187,7 @@
             }
 
             // Update the page through input
-            $scope.changedCurrentPage = function () {    
+            $scope.changedCurrentPage = function () {
                 // If the user has deleted the input number to enter a new one
                 if ($scope.currentPage === null || $scope.currentPage === undefined) {
                     return;
@@ -123,9 +195,6 @@
                 $scope.onUpdate({ itemsPerPage: $scope.itemsPerPage, currentPage: $scope.currentPage });
             }
         }
-
-        function link(scope, element, attrs) { }
-
         return directive;
     }
 

@@ -21,9 +21,11 @@
             . the indicators don't need to look pretty, they just have to be distinct (ascending from descending) and communicate well what they're doing
 
         -->
-        <th>Id </th>
-        <th>Task </th>
-        <th>Created Date </th>
+
+        <th id="id" ng-click="sortPriority('id')" style="cursor: pointer;">ID</th>
+        <th id="task" ng-click="sortPriority('task')" style="cursor: pointer;">Task</th>
+        <th id="createdDate" ng-click="sortPriority('createdDate')" style="cursor: pointer;">Created Date</th>
+
     </tr>
 
     <!-- table:body -->
@@ -43,10 +45,5 @@
 </table>
 
 <!-- pagination component -->
-<pagination
-        current-page="currentPage"
-        total-items="totalItems"
-        total-pages="totalPages"
-        items-per-page="itemsPerPage"
-        on-update="onPageChange(itemsPerPage, currentPage)"
-></pagination>
+<pagination current-page="currentPage" total-items="totalItems" total-pages="totalPages" items-per-page="itemsPerPage"
+    on-update="onPageChange(itemsPerPage, currentPage)"></pagination>

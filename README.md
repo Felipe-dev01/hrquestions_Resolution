@@ -29,7 +29,37 @@ Este repositório contém a implementação de um sistema de lista de tarefas (T
 - **Mais Difícil:** AngularJS, principalmente por ser menos familiar, demandando mais tempo para compreender e implementar as funcionalidades.
 
 ---
+## Por que foi criado o arquivo `PagedResult`?
 
+O arquivo `PagedResult` foi desenvolvido para atender aos requisitos de DTO (Data Transfer Object) na camada de serviço. Ele é fundamental para o funcionamento da paginação e para fornecer ao cliente as informações necessárias sobre os dados paginados.
+
+**Sem o `PagedResult`, o cliente não saberia:**
+- Quantas páginas existem
+- Qual é a página atual
+- Quantos itens (ToDos) existem no total
+
+Dessa forma, o `PagedResult` garante que o front-end possa exibir corretamente os controles de navegação, o total de tarefas e a posição atual dentro da paginação.
+
+--- 
+## Por que foi criada a função `$scope.updatePage`?
+
+A função `$scope.updatePage` foi desenvolvida como função central de sincronização entre o front-end AngularJS e a API do back-end. Ela desempenha um papel fundamental para garantir que a interface do usuário esteja sempre alinhada com os dados mais recentes do servidor.
+
+**Responsabilidade Principal**
+- **Ponte de Comunicação:** Faz a ligação entre o front-end e a API `/api/todo/todospaginated`, garantindo que as informações exibidas estejam sempre atualizadas.
+- **Sincronização de Estado:** Mantém o estado local do AngularJS sincronizado com os dados recebidos do servidor.
+- **Requisição Parametrizada:** Envia todos os parâmetros necessários para a paginação e ordenação, como página atual, quantidade de itens por página, propriedade de ordenação e direção.
+
+**Por que foi necessária?**
+- **Diferentes Situações de chamadas:** A função é chamada em diferentes cenários críticos para o funcionamento da aplicação:
+  - Na inicialização da página (`$scope.updatePage()` ao final do controller)
+  - Ao alterar a página (`$scope.onPageChange`)
+  - Ao modificar a ordenação (`$scope.sortPriority`)
+  - Quando o número de itens por página é alterado
+
+Dessa forma, `$scope.updatePage` centraliza a lógica de atualização dos dados exibidos, permitindo um fluxo consistente e previsível entre as ações do usuário e a resposta da aplicação.
+
+--- 
 ## Tempo Empenhado
 
 - **Segunda (04/08):** 17:30 às 20:00 — Entendimento da estrutura do projeto e pesquisa de conteúdo online.
